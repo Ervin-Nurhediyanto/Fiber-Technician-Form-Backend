@@ -142,9 +142,9 @@ module.exports = {
     bcrypt.genSalt(10, function (_err, salt) {
       bcrypt.hash(data.password, salt, function (_err, hash) {
         data.password = hash
-        modelTechnician.resetPassword(id, data)
+        modelTechnician.updateTechnician(id, data)
           .then((result) => {
-            helpers.response(res, result, 200, null)
+            helpers.response(res, 'Reset Password Success', 200, null)
           })
           .catch((err) => {
             console.log(err)

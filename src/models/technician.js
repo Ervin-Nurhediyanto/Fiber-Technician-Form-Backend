@@ -107,27 +107,5 @@ module.exports = {
         }
       })
     })
-  },
-  //   updateImage: (id, data) => {
-  //     return new Promise((resolve, reject) => {
-  //       connection.query('UPDATE technician SET ? WHERE id = ?', [data, id], (err, result) => {
-  //         if (!err) {
-  //           resolve('Upload Image Success')
-  //         } else {
-  //           reject(new Error(err))
-  //         }
-  //       })
-  //     })
-  //   },
-  resetPassword: (id, data) => {
-    return new Promise((resolve, reject) => {
-      connection.query('UPDATE technician SET ? WHERE id = ?', [data, id], (err, result) => {
-        if (!err) {
-          resolve('Reset Password Success')
-        } else {
-          reject(new Error(err))
-        }
-      })
-    })
   }
 }
