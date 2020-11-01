@@ -1,29 +1,20 @@
 const helpers = {
-  response: (res, page, result, status, err, message) => {
+  response: (res, result, status, err, message, page) => {
     const resultPrint = {}
 
-    if (status === 201) {
-      resultPrint.status = 'Created success'
-    } else if (status !== 200) {
-      resultPrint.status = 'Failed'
-    } else {
+    if (status === 200) {
       resultPrint.status = 'Success'
+    } else {
+      resultPrint.status = 'Failed'
     }
 
-    if (page !== null) {
-      resultPrint.page = page
-    }
-
-    if (typeof result !== 'string') {
-      if (status === 404) {
-        resultPrint.totalItem = 0
-      } else {
-        resultPrint.totalItem = result.length
-      }
-    }
-
-    if (message !== null) {
+    if (message) {
       resultPrint.message = message
+    }
+
+    if (page) {
+      resultPrint.page = page
+      resultPrint.totalItem = result.length
     }
 
     resultPrint.status_code = status
