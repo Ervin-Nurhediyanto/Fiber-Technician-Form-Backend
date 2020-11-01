@@ -87,8 +87,10 @@ module.exports = {
     const search = req.query.search
     modelTechnician.getAllTechnician(search)
       .then((result) => {
-        console.log(result)
         if (result != '') {
+          result.map((user) => {
+            delete user.password
+          })
           helpers.response(res, result, 200, null)
         } else {
           helpers.response(res, 'User not found', 404, 'error')
@@ -102,8 +104,10 @@ module.exports = {
     const id = req.params.id
     modelTechnician.getTechnicianById(id)
       .then((result) => {
-        console.log(result)
         if (result != '') {
+          result.map((user) => {
+            delete user.password
+          })
           helpers.response(res, result, 200, null)
         } else {
           helpers.response(res, 'User not found', 404, 'error')
