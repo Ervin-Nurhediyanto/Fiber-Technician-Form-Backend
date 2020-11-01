@@ -26,9 +26,9 @@ function upload (req, res, next) {
   uploadFiles(req, res, function (err) {
     if (err) {
       if (err == 'jpg Only!') {
-        return helpers.response(res, null, 'jpg Only!', 202, 'processing has not been completed')
+        return helpers.response(res, 'jpg Only!', 202, 'processing has not been completed')
       } else {
-        return helpers.response(res, null, 'File too large', 202, 'processing has not been completed')
+        return helpers.response(res, 'File too large', 202, 'processing has not been completed')
       }
     } else {
       next()
