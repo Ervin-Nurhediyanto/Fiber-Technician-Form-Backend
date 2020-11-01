@@ -1,4 +1,5 @@
 const modelTechnician = require('../models/technician')
+const sendEmail = require('../middlewares/sendEmail')
 const helpers = require('../helpers/helpers')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -22,7 +23,10 @@ module.exports = {
             if (result === 'Email is already exists') {
               helpers.response(res, result, 403, 'error 403', 'Forbidden')
             } else {
-              helpers.response(res, 'Register Success', 200)
+              sendEmail.register(email, name, result[0].nik, password)
+              //   helpers.response(res, 'Register Success', 200)
+              //   helpers.response(res, result[0].nik, 200)
+              helpers.response(res, 'Register success, check your email', 200)
             }
           })
           .catch((err) => {

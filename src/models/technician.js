@@ -10,7 +10,43 @@ module.exports = {
           } else {
             connection.query('INSERT INTO technician SET ?', data, (err, result) => {
               if (!err) {
-                resolve(result)
+                connection.query('SELECT * FROM technician ORDER BY nik DESC', (err, result) => {
+                  if (!err) {
+                    if (result[0].nik != '') {
+                      const nik = Number(result[0].nik) + 1
+                      connection.query(`UPDATE technician SET nik = ${nik} WHERE email = ?`, data.email, (err, result) => {
+                        if (!err) {
+                          connection.query('SELECT * FROM technician WHERE email = ?', data.email, (err, result) => {
+                            if (!err) {
+                              resolve(result)
+                            } else {
+                              reject(new Error(err))
+                            }
+                          })
+                        } else {
+                          reject(new Error(err))
+                        }
+                      })
+                    } else {
+                      const nik = 2100578925
+                      connection.query(`UPDATE technician SET nik = ${nik} WHERE email = ?`, data.email, (err, result) => {
+                        if (!err) {
+                          connection.query('SELECT * FROM technician WHERE email = ?', data.email, (err, result) => {
+                            if (!err) {
+                              resolve(result)
+                            } else {
+                              reject(new Error(err))
+                            }
+                          })
+                        } else {
+                          reject(new Error(err))
+                        }
+                      })
+                    }
+                  } else {
+                    reject(new Error(err))
+                  }
+                })
               } else {
                 reject(new Error(err))
               }
