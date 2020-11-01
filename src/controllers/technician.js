@@ -3,6 +3,7 @@ const sendEmail = require('../middlewares/sendEmail')
 const helpers = require('../helpers/helpers')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 
 module.exports = {
   register: (req, res) => {
@@ -110,9 +111,23 @@ module.exports = {
         return process.env.BASE_URL + 'uploads/' + item.filename
       }).join()
     }
-    modelTechnician.updateTechnician(id, data)
+    modelTechnician.getTechnicianById(id)
       .then((result) => {
-        helpers.response(res, 'Upload Image Success', 200, null)
+        if (result != '') {
+          const targetImage = result[0].image.split('/').reverse()
+          fs.unlink(`../../../../../../Users/Cafe'in/Projects/Fiber-Technician-Form-Backend/uploads/${targetImage[0]}`, function (err) {
+            if (err) throw err
+            modelTechnician.updateTechnician(id, data)
+              .then((result) => {
+                helpers.response(res, 'Upload Image Success', 200, null)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          })
+        } else {
+          helpers.response(res, 'User not found', 404, 'error')
+        }
       })
       .catch((err) => {
         console.log(err)
