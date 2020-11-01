@@ -69,17 +69,6 @@ module.exports = {
       })
     })
   },
-  resetPassword: (id, data) => {
-    return new Promise((resolve, reject) => {
-      connection.query('UPDATE technician SET ? WHERE id = ?', [data, id], (err, result) => {
-        if (!err) {
-          resolve('Reset Password Success')
-        } else {
-          reject(new Error(err))
-        }
-      })
-    })
-  },
   getTechnicianById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM technician WHERE id = ?', id, (err, result) => {
@@ -119,11 +108,22 @@ module.exports = {
       })
     })
   },
-  updateImage: (id, data) => {
+  //   updateImage: (id, data) => {
+  //     return new Promise((resolve, reject) => {
+  //       connection.query('UPDATE technician SET ? WHERE id = ?', [data, id], (err, result) => {
+  //         if (!err) {
+  //           resolve('Upload Image Success')
+  //         } else {
+  //           reject(new Error(err))
+  //         }
+  //       })
+  //     })
+  //   },
+  resetPassword: (id, data) => {
     return new Promise((resolve, reject) => {
       connection.query('UPDATE technician SET ? WHERE id = ?', [data, id], (err, result) => {
         if (!err) {
-          resolve('Upload Image Success')
+          resolve('Reset Password Success')
         } else {
           reject(new Error(err))
         }

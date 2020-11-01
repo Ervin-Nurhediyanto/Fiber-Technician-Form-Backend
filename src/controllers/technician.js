@@ -5,16 +5,13 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
-
   register: (req, res) => {
     const { name, email, password } = req.body
-
     const data = {
       name,
       email,
       password
     }
-
     bcrypt.genSalt(10, function (_err, salt) {
       bcrypt.hash(data.password, salt, function (_err, hash) {
         data.password = hash
@@ -33,13 +30,11 @@ module.exports = {
       })
     })
   },
-
   login: (req, res) => {
     const { nik, password } = req.body
     modelTechnician.login(nik)
       .then((result) => {
         if (result.length < 1) return helpers.response(res, 'user not found!', 401, null)
-
         const user = result[0]
         const hash = user.password
         bcrypt.compare(password, hash).then((resCompare) => {
@@ -48,7 +43,6 @@ module.exports = {
             id: user.id,
             nik: user.nik
           }
-
           jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '3h' }, (_err, token) => {
             user.token = token
             delete user.password
@@ -60,29 +54,6 @@ module.exports = {
         console.log(err)
       })
   },
-
-  resetPassword: (req, res) => {
-    const id = req.params.id
-    const { password } = req.body
-
-    const data = {
-      password: password
-    }
-
-    bcrypt.genSalt(10, function (_err, salt) {
-      bcrypt.hash(data.password, salt, function (_err, hash) {
-        data.password = hash
-        modelTechnician.resetPassword(id, data)
-          .then((result) => {
-            helpers.response(res, result, 200, null)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      })
-    })
-  },
-
   getAllTechnician: (req, res) => {
     const search = req.query.search
     modelTechnician.getAllTechnician(search)
@@ -119,18 +90,11 @@ module.exports = {
   },
   updateTechnician: (req, res) => {
     const id = req.params.id
-    const { name } = req.body
-
+    const { name, phoneNumber } = req.body
     const data = {
-      name
+      name,
+      phoneNumber
     }
-
-    if (req.files) {
-      data.image = req.files.map((item) => {
-        return process.env.BASE_URL + 'uploads/' + item.filename
-      }).join()
-    }
-
     modelTechnician.updateTechnician(id, data)
       .then((result) => {
         helpers.response(res, result, 200, null)
@@ -146,13 +110,31 @@ module.exports = {
         return process.env.BASE_URL + 'uploads/' + item.filename
       }).join()
     }
-
-    modelTechnician.updateUser(id, data)
+    modelTechnician.updateTechnician(id, data)
       .then((result) => {
-        helpers.response(res, result, 200, null)
+        helpers.response(res, 'Upload Image Success', 200, null)
       })
       .catch((err) => {
         console.log(err)
       })
+  },
+  resetPassword: (req, res) => {
+    const id = req.params.id
+    const { password } = req.body
+    const data = {
+      password: password
+    }
+    bcrypt.genSalt(10, function (_err, salt) {
+      bcrypt.hash(data.password, salt, function (_err, hash) {
+        data.password = hash
+        modelTechnician.resetPassword(id, data)
+          .then((result) => {
+            helpers.response(res, result, 200, null)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    })
   }
 }
