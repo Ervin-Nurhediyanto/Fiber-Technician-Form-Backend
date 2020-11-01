@@ -24,8 +24,6 @@ module.exports = {
               helpers.response(res, result, 403, 'error 403', 'Forbidden')
             } else {
               sendEmail.register(email, name, result[0].nik, password)
-              //   helpers.response(res, 'Register Success', 200)
-              //   helpers.response(res, result[0].nik, 200)
               helpers.response(res, 'Register success, check your email', 200)
             }
           })
@@ -48,7 +46,7 @@ module.exports = {
           if (!resCompare) return helpers.response(res, 'Password wrong!', 401, null)
           const payload = {
             id: user.id,
-            email: user.email
+            nik: user.nik
           }
 
           jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '3h' }, (_err, token) => {
